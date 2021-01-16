@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link as ReactLink } from 'react-router-dom';
+import axios from 'axios';
 
 import Navbar from './Navbar';
 
@@ -38,14 +39,36 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Login = ({ location, history }) => {
+const LoginComponent = ({ location, history }) => {
   const classes = useStyles();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  const login = (email, password) => async () => {
+    try {
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      };
+
+      const { data } = await axios.post(
+        'http://localhost:5000/api/v1/auth/login',
+        { email, password },
+        config
+      );
+
+      localStorage.setItem('userInfo', JSON.stringify(data));
+    } catch (error) {
+      console.log(error)
+    }
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    login(email, password);
+    history.push('/private');
     localStorage.setItem('newUser', false);
   };
 
@@ -123,4 +146,4 @@ const Login = ({ location, history }) => {
   );
 };
 
-export default Login;
+export default LoginComponent;

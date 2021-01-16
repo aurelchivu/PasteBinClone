@@ -1,7 +1,8 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
 import Home from './components/Home';
-import Login from './components/Login'
+import LoginComponent from './components/LoginComponent';
+import PrivateComponent from './components/PrivateComponent'
 import SignUp from './components/SignUp'
 import { withStyles } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
@@ -38,8 +39,13 @@ const App = () => {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Route exact path='/' render={(props) => <Home {...props} />} />
-        <Route exact path='/login' render={(props) => <Login {...props} />} />
+        <Route
+          exact
+          path='/login'
+          render={(props) => <LoginComponent {...props} />}
+        />
         <Route exact path='/signup' render={(props) => <SignUp {...props} />} />
+        <Route exact path='/private' render={(props) => <PrivateComponent {...props} />} />
       </ThemeProvider>
     </>
   );
