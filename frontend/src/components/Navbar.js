@@ -9,6 +9,10 @@ import Grid from '@material-ui/core/Grid';
 
 const useStyles = makeStyles((theme) => ({
   root: {
+    '& .MuiTextField-root': {
+      margin: theme.spacing(1),
+      width: '25ch',
+    },
     flexGrow: 1,
   },
   menuButton: {
@@ -17,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Header = () => {
+const Home = () => {
   const classes = useStyles();
   return (
     <>
@@ -50,4 +54,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default Home;

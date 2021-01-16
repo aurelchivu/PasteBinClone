@@ -1,7 +1,8 @@
 import React from 'react';
-import Header from './components/Header';
-import Body from './components/Body'
-import Footer from './components/Footer';
+import { Route } from 'react-router-dom';
+import Home from './components/Home';
+import Login from './components/Login'
+import SignUp from './components/SignUp'
 import { withStyles } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
 import { CssBaseline, Typography, createMuiTheme } from '@material-ui/core';
@@ -36,12 +37,10 @@ const App = () => {
     <>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <Header />
-        <main>
-          <Body />
-        </main>
+        <Route exact path='/' render={(props) => <Home {...props} />} />
+        <Route exact path='/login' render={(props) => <Login {...props} />} />
+        <Route exact path='/signup' render={(props) => <SignUp {...props} />} />
       </ThemeProvider>
-      <Footer />
     </>
   );
 };
