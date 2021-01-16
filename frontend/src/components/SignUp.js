@@ -125,7 +125,7 @@ const SignUp = ({ location, history }) => {
               color='primary'
               className={classes.submit}
             >
-              Register
+              Sign Up
             </Button>
             <Grid container>
               <Grid alignItems='center'>

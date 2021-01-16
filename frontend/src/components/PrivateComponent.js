@@ -2,9 +2,9 @@ import React from 'react'
 
 const PrivateComponent = () => {
   return (
-    <div>
-      
-    </div>
+    <>
+      <h1>Hi, this is your private page</h1>
+    </>
   )
 }
 

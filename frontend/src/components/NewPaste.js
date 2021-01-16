@@ -1,25 +1,8 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 
-import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    '& .MuiTextField-root': {
-      margin: theme.spacing(1),
-      width: '25ch',
-    },
-    flexGrow: 1,
-  },
-  menuButton: {
-    marginRight: theme.spacing(1),
-    justify: 'flex-end',
-  },
-}));
-
-const Home = () => {
-  const classes = useStyles();
+const NewPaste = () => {
   return (
     <>
       <TextField
@@ -34,4 +17,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default NewPaste;
