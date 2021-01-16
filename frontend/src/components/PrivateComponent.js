@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState, getState } from 'react';
 import { Link } from 'react-router-dom';
-import NewPaste from './NewPaste';
+import axios from 'axios';
 
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
@@ -23,24 +23,58 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const userInfoFromStorage = localStorage.getItem('userInfo')
-  ? JSON.parse(localStorage.getItem('userInfo'))
-  : null;
-
 const PrivateComponent = () => {
   const classes = useStyles();
 
+  const userInfoFromStorage = localStorage.getItem('userInfo')
+    ? JSON.parse(localStorage.getItem('userInfo'))
+    : null;
+
+  const [newPaste, setNewPaste] = useState('');
+
+  const createPaste = (newPaste) => async () => {
+    try {
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${userInfoFromStorage.token}`,
+        },
+      };
+
+      const { data } = await axios.post(
+        `http://localhost:5000/api/v1/pastes`,
+        {content: newPaste},
+        config
+      );
+      
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    createPaste(newPaste)();
+  };
+
+  const logout = () => {
+    localStorage.removeItem('userInfo');
+    localStorage.removeItem('newUser');
+    document.location.href = '/';
   };
 
   return (
     <>
       <AppBar className={classes.root} position='static' color='default'>
         <Toolbar>
-          <h2>{userInfoFromStorage.username}</h2>
+          <h3>{userInfoFromStorage.username}</h3>
           <Grid container justify='flex-end'>
-            <Button variant='contained' component={Link} to='/signup'>
+            <Button
+              onClick={logout}
+              variant='contained'
+              component={Link}
+              to='/signup'
+            >
               Logout
             </Button>
           </Grid>
@@ -50,6 +84,9 @@ const PrivateComponent = () => {
       <form className={classes.form} noValidate onSubmit={handleSubmit}>
         <Grid container spacing={2}>
           <TextField
+            value={newPaste}
+            onInput={(e) => setNewPaste(e.target.value)}
+            required
             id='outlined-multiline-static'
             label='New Paste'
             multiline

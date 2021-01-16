@@ -62,10 +62,12 @@ const LoginComponent = ({ history }) => {
 
       if (data.succes) {
         console.log(data);
+        localStorage.setItem('userInfo', JSON.stringify(data));
         history.push('/private');
+        
       }
 
-      localStorage.setItem('userInfo', JSON.stringify(data));
+      
     } catch (error) {
       console.log(error);
     }
