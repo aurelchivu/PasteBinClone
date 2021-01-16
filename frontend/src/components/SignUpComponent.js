@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link as ReactLink } from 'react-router-dom';
+import axios from 'axios';
+import { login } from './../utils/login';
+// import { signUp } from './../utils/signUp';
 
 import Navbar from './Navbar';
 
@@ -35,16 +38,42 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const SignUp = ({ location, history }) => {
+const SignUpComponent = ({ history }) => {
   const classes = useStyles();
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
+  const signUp = (username, email, password) => async () => {
+    try {
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      };
+
+      const { data } = await axios.post(
+        'http://localhost:5000/api/v1/auth/register',
+        { username, email, password },
+        config
+      );
+
+      if (data.success) {
+        console.log(data);
+        login(email, password)();
+        history.push('/private');
+      }
+
+      localStorage.setItem('userInfo', JSON.stringify(data));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    localStorage.setItem('newUser', true);
+    signUp(username, email, password)();
   };
 
   return (
@@ -141,4 +170,4 @@ const SignUp = ({ location, history }) => {
   );
 };
 
-export default SignUp;
+export default SignUpComponent;

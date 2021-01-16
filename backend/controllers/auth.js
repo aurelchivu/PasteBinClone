@@ -28,8 +28,10 @@ exports.register = asyncHandler(async (req, res, next) => {
       _id: user._id,
       username: user.username,
       email: user.email,
+      role: user.role,
       token: generateToken(user._id),
-    })
+      success: true,
+    });
   } else {
     res.status(400)
     throw new Error('Invalid user data')
@@ -55,7 +57,9 @@ exports.login = asyncHandler(async (req, res, next) => {
       _id: user._id,
       username: user.username,
       email: user.email,
+      role: user.role,
       token: generateToken(user._id),
+      succes: true,
     })
   } else {
     res.status(401)

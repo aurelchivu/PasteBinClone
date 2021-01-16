@@ -3,7 +3,7 @@ import { Route } from 'react-router-dom';
 import Home from './components/Home';
 import LoginComponent from './components/LoginComponent';
 import PrivateComponent from './components/PrivateComponent'
-import SignUp from './components/SignUp'
+import SignUpComponent from './components/SignUpComponent';
 import { withStyles } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
 import { CssBaseline, Typography, createMuiTheme } from '@material-ui/core';
@@ -44,8 +44,16 @@ const App = () => {
           path='/login'
           render={(props) => <LoginComponent {...props} />}
         />
-        <Route exact path='/signup' render={(props) => <SignUp {...props} />} />
-        <Route exact path='/private' render={(props) => <PrivateComponent {...props} />} />
+        <Route
+          exact
+          path='/signup'
+          render={(props) => <SignUpComponent {...props} />}
+        />
+        <Route
+          exact
+          path='/private'
+          render={(props) => <PrivateComponent {...props} />}
+        />
       </ThemeProvider>
     </>
   );

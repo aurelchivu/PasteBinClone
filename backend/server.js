@@ -1,6 +1,8 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
+const hpp = require('hpp');
+const cors = require('cors');
 const colors = require('colors');
 const errorHandler = require('./middleware/error'); // custom error handler
 const connectDB = require('./config/db');
@@ -18,14 +20,23 @@ const users = require('./routes/users');
 
 const app = express();
 
+// Body parser
+app.use(express.json());
+
 // HTTP request logger middleware for node.js
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
 
+// Prevent http param pollution
+app.use(hpp());
+
+// Enable CORS
+app.use(cors());
+
 // Mount routers
 app.use('/api/v1/auth', auth);
-app.use('/api', home);
+app.use('/api/v1', home);
 app.use('/api/v1/users', users);
 
 app.use((req, res, next) => {

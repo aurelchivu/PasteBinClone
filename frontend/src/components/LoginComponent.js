@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link as ReactLink } from 'react-router-dom';
 import axios from 'axios';
+// import { login } from './../utils/login';
 
 import Navbar from './Navbar';
 
@@ -39,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const LoginComponent = ({ location, history }) => {
+const LoginComponent = ({ history }) => {
   const classes = useStyles();
 
   const [email, setEmail] = useState('');
@@ -59,17 +60,20 @@ const LoginComponent = ({ location, history }) => {
         config
       );
 
+      if (data.succes) {
+        console.log(data);
+        history.push('/private');
+      }
+
       localStorage.setItem('userInfo', JSON.stringify(data));
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    login(email, password);
-    history.push('/private');
-    localStorage.setItem('newUser', false);
+    login(email, password)();
   };
 
   return (
