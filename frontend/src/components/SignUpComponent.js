@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Link as ReactLink } from 'react-router-dom';
 import axios from 'axios';
 import { login } from './../utils/login';
-// import { signUp } from './../utils/signUp';
 
 import Navbar from './Navbar';
 
@@ -38,14 +37,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const SignUpComponent = ({ history }) => {
+const SignUpComponent = ({ location, history }) => {
   const classes = useStyles();
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
-  const signUp = (username, email, password) => async () => {
+  const signUp = async (username, email, password) => {
     try {
       const config = {
         headers: {
@@ -61,11 +60,12 @@ const SignUpComponent = ({ history }) => {
 
       if (data.success) {
         console.log(data);
-        login(email, password)();
+        login(email, password);
         history.push('/private');
       }
 
       localStorage.setItem('userInfo', JSON.stringify(data));
+
     } catch (error) {
       console.log(error);
     }
@@ -73,7 +73,7 @@ const SignUpComponent = ({ history }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    signUp(username, email, password)();
+    signUp(username, email, password);
   };
 
   return (

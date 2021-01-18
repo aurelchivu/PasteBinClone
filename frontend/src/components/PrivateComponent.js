@@ -1,4 +1,4 @@
-import React, { useState, getState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
@@ -23,16 +23,17 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const PrivateComponent = () => {
+const PrivateComponent = ({ history }) => {
   const classes = useStyles();
 
   const userInfoFromStorage = localStorage.getItem('userInfo')
     ? JSON.parse(localStorage.getItem('userInfo'))
     : null;
 
-  const [newPaste, setNewPaste] = useState('');
+  const [content, setContent] = useState('');
+  const [title, setTitle] = useState('');
 
-  const createPaste = (newPaste) => async () => {
+  const createPaste = async (content, title) => {
     try {
       const config = {
         headers: {
@@ -43,18 +44,23 @@ const PrivateComponent = () => {
 
       const { data } = await axios.post(
         `http://localhost:5000/api/v1/pastes`,
-        {content: newPaste},
+        { content, title },
         config
       );
-      
     } catch (error) {
       console.log(error);
     }
   };
 
+  useEffect(() => {
+    history.push('/private');
+  }, [history]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    createPaste(newPaste)();
+    createPaste(content, title);
+    setContent('');
+    setTitle('');
   };
 
   const logout = () => {
@@ -67,7 +73,9 @@ const PrivateComponent = () => {
     <>
       <AppBar className={classes.root} position='static' color='default'>
         <Toolbar>
-          <h3>{userInfoFromStorage.username}</h3>
+          {userInfoFromStorage && userInfoFromStorage.username && (
+            <h3>{userInfoFromStorage.username}</h3>
+          )}
           <Grid container justify='flex-end'>
             <Button
               onClick={logout}
@@ -84,8 +92,8 @@ const PrivateComponent = () => {
       <form className={classes.form} noValidate onSubmit={handleSubmit}>
         <Grid container spacing={2}>
           <TextField
-            value={newPaste}
-            onInput={(e) => setNewPaste(e.target.value)}
+            value={content}
+            onInput={(e) => setContent(e.target.value)}
             required
             id='outlined-multiline-static'
             label='New Paste'
@@ -94,6 +102,18 @@ const PrivateComponent = () => {
             style={{ width: '80%' }}
             variant='outlined'
           />
+          <Grid item xs={12} sm={12}>
+            <TextField
+              value={title}
+              onInput={(e) => setTitle(e.target.value)}
+              required
+              id='outlined-multiline-static'
+              label='Title'
+              multiline
+              variant='outlined'
+            />
+          </Grid>
+
           <Grid item xs={12} sm={12}>
             <Button
               type='submit'

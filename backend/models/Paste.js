@@ -11,6 +11,10 @@ const PasteSchema = new mongoose.Schema(
       type: String,
       required: [true, 'Please add content'],
     },
+    title: {
+      type: String,
+      required: [true, 'Please add title'],
+    },
     createdAt: {
       type: Date,
       default: Date.now,

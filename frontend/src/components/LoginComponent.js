@@ -46,7 +46,7 @@ const LoginComponent = ({ history }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const login = (email, password) => async () => {
+  const login = async (email, password) => {
     try {
       const config = {
         headers: {
@@ -61,13 +61,9 @@ const LoginComponent = ({ history }) => {
       );
 
       if (data.succes) {
-        console.log(data);
         localStorage.setItem('userInfo', JSON.stringify(data));
         history.push('/private');
-        
       }
-
-      
     } catch (error) {
       console.log(error);
     }
@@ -75,7 +71,7 @@ const LoginComponent = ({ history }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    login(email, password)();
+    login(email, password);
   };
 
   return (

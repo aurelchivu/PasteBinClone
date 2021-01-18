@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export const login = (email, password) => async () => {
+export const login = async (email, password) => {
   try {
     const config = {
       headers: {
@@ -13,10 +13,9 @@ export const login = (email, password) => async () => {
       { email, password },
       config
     );
-    console.log(data)
+    console.log(data);
 
     localStorage.setItem('userInfo', JSON.stringify(data));
-    
   } catch (error) {
     console.log(error);
   }
