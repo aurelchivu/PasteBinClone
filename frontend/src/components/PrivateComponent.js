@@ -2,12 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
+import ReactTimeAgo from 'react-time-ago';
+
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -26,12 +30,13 @@ const useStyles = makeStyles((theme) => ({
 const PrivateComponent = ({ history }) => {
   const classes = useStyles();
 
+  const [content, setContent] = useState('');
+  const [title, setTitle] = useState('');
+  const [pastesList, setPastesList] = useState({});
+
   const userInfoFromStorage = localStorage.getItem('userInfo')
     ? JSON.parse(localStorage.getItem('userInfo'))
     : null;
-
-  const [content, setContent] = useState('');
-  const [title, setTitle] = useState('');
 
   const createPaste = async (content, title) => {
     try {
@@ -47,14 +52,40 @@ const PrivateComponent = ({ history }) => {
         { content, title },
         config
       );
+
+      console.log(data);
     } catch (error) {
       console.log(error);
     }
   };
 
-  useEffect(() => {
-    history.push('/private');
-  }, [history]);
+  const listPastes = async () => {
+    try {
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${userInfoFromStorage.token}`,
+        },
+      };
+
+      const { data } = await axios.get(
+        `http://localhost:5000/api/v1/pastes`,
+        config
+      );
+
+      console.log(data);
+
+      setPastesList(data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // useEffect(() => {
+  //   if (userInfoFromStorage) {
+  //     history.push('/private');
+  //   }
+  // }, [history, userInfoFromStorage]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -65,8 +96,11 @@ const PrivateComponent = ({ history }) => {
 
   const logout = () => {
     localStorage.removeItem('userInfo');
-    localStorage.removeItem('newUser');
     document.location.href = '/';
+  };
+
+  const handleClick = () => {
+    listPastes();
   };
 
   return (
@@ -91,17 +125,19 @@ const PrivateComponent = ({ history }) => {
       <br />
       <form className={classes.form} noValidate onSubmit={handleSubmit}>
         <Grid container spacing={2}>
-          <TextField
-            value={content}
-            onInput={(e) => setContent(e.target.value)}
-            required
-            id='outlined-multiline-static'
-            label='New Paste'
-            multiline
-            rows={15}
-            style={{ width: '80%' }}
-            variant='outlined'
-          />
+          <Grid item xs={12} sm={12}>
+            <TextField
+              value={content}
+              onInput={(e) => setContent(e.target.value)}
+              required
+              id='outlined-multiline-static'
+              label='New Paste'
+              multiline
+              rows={15}
+              style={{ width: '80%' }}
+              variant='outlined'
+            />
+          </Grid>
           <Grid item xs={12} sm={12}>
             <TextField
               value={title}
@@ -113,7 +149,6 @@ const PrivateComponent = ({ history }) => {
               variant='outlined'
             />
           </Grid>
-
           <Grid item xs={12} sm={12}>
             <Button
               type='submit'
@@ -126,6 +161,35 @@ const PrivateComponent = ({ history }) => {
           </Grid>
         </Grid>
       </form>
+      <br />
+      <Grid item xs={12} sm={12}>
+        <Button
+          onClick={handleClick}
+          type='submit'
+          variant='outlined'
+          color='default'
+          className={classes.submit}
+        >
+          Get All Pastes
+        </Button>
+      </Grid>
+      <ul>
+      {pastesList &&
+        Object.values(pastesList).map((paste) => {
+          return (
+            <li key={paste._id}>
+              <Link
+                to={`private/pastes/${paste._id}`}
+                style={{ color: 'green', textDecoration: 'none' }}
+              >
+                {paste.title}
+              </Link>
+              {' - '}
+              <ReactTimeAgo date={new Date(paste.createdAt)} locale='en-US' />
+            </li>
+          );
+        })}
+      </ul>
     </>
   );
 };

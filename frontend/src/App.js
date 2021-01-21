@@ -2,11 +2,11 @@ import React from 'react';
 import { Route } from 'react-router-dom';
 import Home from './components/Home';
 import LoginComponent from './components/LoginComponent';
-import PrivateComponent from './components/PrivateComponent'
+import PrivateComponent from './components/PrivateComponent';
 import SignUpComponent from './components/SignUpComponent';
 import { withStyles } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
-import { CssBaseline, Typography, createMuiTheme } from '@material-ui/core';
+import { CssBaseline, createMuiTheme } from '@material-ui/core';
 
 const theme = createMuiTheme({
   palette: {

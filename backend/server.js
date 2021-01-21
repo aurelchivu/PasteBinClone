@@ -16,7 +16,7 @@ connectDB();
 // Route files
 const auth = require('./routes/auth');
 const home = require('./routes/home');
-const paste = require('./routes/pastes')
+const pastes = require('./routes/pastes')
 const users = require('./routes/users');
 
 const app = express();
@@ -38,7 +38,7 @@ app.use(cors());
 // Mount routers
 app.use('/api/v1', home);
 app.use('/api/v1/auth', auth);
-app.use('/api/v1/pastes', paste);
+app.use('/api/v1/pastes', pastes);
 app.use('/api/v1/users', users);
 
 app.use((req, res, next) => {
