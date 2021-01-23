@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Route } from 'react-router-dom';
 import axios from 'axios';
 
 import ReactTimeAgo from 'react-time-ago';
@@ -10,8 +10,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -32,7 +31,7 @@ const PrivateComponent = ({ history }) => {
 
   const [content, setContent] = useState('');
   const [title, setTitle] = useState('');
-  const [pastesList, setPastesList] = useState({});
+  const [pastesList, setPastesList] = useState([]);
 
   const userInfoFromStorage = localStorage.getItem('userInfo')
     ? JSON.parse(localStorage.getItem('userInfo'))
@@ -87,6 +86,10 @@ const PrivateComponent = ({ history }) => {
   //   }
   // }, [history, userInfoFromStorage]);
 
+  useEffect(() => {
+    listPastes();
+  }, []);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     createPaste(content, title);
@@ -98,11 +101,7 @@ const PrivateComponent = ({ history }) => {
     localStorage.removeItem('userInfo');
     document.location.href = '/';
   };
-
-  const handleClick = () => {
-    listPastes();
-  };
-
+  
   return (
     <>
       <AppBar className={classes.root} position='static' color='default'>
@@ -163,32 +162,27 @@ const PrivateComponent = ({ history }) => {
       </form>
       <br />
       <Grid item xs={12} sm={12}>
-        <Button
-          onClick={handleClick}
-          type='submit'
-          variant='outlined'
-          color='default'
-          className={classes.submit}
-        >
-          Get All Pastes
-        </Button>
+        <h3>My pastes</h3>
       </Grid>
       <ul>
-      {pastesList &&
-        Object.values(pastesList).map((paste) => {
-          return (
-            <li key={paste._id}>
-              <Link
-                to={`private/pastes/${paste._id}`}
-                style={{ color: 'green', textDecoration: 'none' }}
-              >
-                {paste.title}
-              </Link>
-              {' - '}
-              <ReactTimeAgo date={new Date(paste.createdAt)} locale='en-US' />
-            </li>
-          );
-        })}
+        {pastesList ? (
+          Object.values(pastesList).map((paste) => {
+            return (
+              <li key={paste._id}>
+                <Link
+                  to={`private/pastes/${paste._id}`}
+                  style={{ color: 'green', textDecoration: 'none' }}
+                >
+                  {paste.title}
+                </Link>
+                {' - '}
+                <ReactTimeAgo date={new Date(paste.createdAt)} locale='en-US' />
+              </li>
+            );
+          })
+        ) : (
+          <div>Loading...</div>
+        )}
       </ul>
     </>
   );

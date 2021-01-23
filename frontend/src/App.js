@@ -4,6 +4,7 @@ import Home from './components/Home';
 import LoginComponent from './components/LoginComponent';
 import PrivateComponent from './components/PrivateComponent';
 import SignUpComponent from './components/SignUpComponent';
+import Paste from './components/Paste'
 import { withStyles } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
 import { CssBaseline, createMuiTheme } from '@material-ui/core';
@@ -53,6 +54,12 @@ const App = () => {
           exact
           path='/private'
           render={(props) => <PrivateComponent {...props} />}
+        />
+        <Route
+          exact
+          path='/private/pastes/:pasteId'
+          component={Paste}
+          // render={(props) => <Paste {...props} />}
         />
       </ThemeProvider>
     </>
