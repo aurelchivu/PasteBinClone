@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, Route } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 import ReactTimeAgo from 'react-time-ago';
@@ -10,7 +10,6 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
-
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -26,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const PrivateComponent = ({ history }) => {
+const PrivateComponent = () => {
   const classes = useStyles();
 
   const [content, setContent] = useState('');
@@ -52,7 +51,6 @@ const PrivateComponent = ({ history }) => {
         config
       );
 
-      console.log(data);
     } catch (error) {
       console.log(error);
     }
@@ -72,19 +70,12 @@ const PrivateComponent = ({ history }) => {
         config
       );
 
-      console.log(data);
-
       setPastesList(data.data);
+
     } catch (error) {
       console.log(error);
     }
   };
-
-  // useEffect(() => {
-  //   if (userInfoFromStorage) {
-  //     history.push('/private');
-  //   }
-  // }, [history, userInfoFromStorage]);
 
   useEffect(() => {
     listPastes();
@@ -93,6 +84,7 @@ const PrivateComponent = ({ history }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     createPaste(content, title);
+    listPastes();
     setContent('');
     setTitle('');
   };
@@ -101,7 +93,7 @@ const PrivateComponent = ({ history }) => {
     localStorage.removeItem('userInfo');
     document.location.href = '/';
   };
-  
+
   return (
     <>
       <AppBar className={classes.root} position='static' color='default'>
@@ -152,7 +144,7 @@ const PrivateComponent = ({ history }) => {
             <Button
               type='submit'
               variant='outlined'
-              color='default'
+              color='secondary'
               className={classes.submit}
             >
               create new paste
@@ -186,6 +178,6 @@ const PrivateComponent = ({ history }) => {
       </ul>
     </>
   );
-};
+};;
 
 export default PrivateComponent;

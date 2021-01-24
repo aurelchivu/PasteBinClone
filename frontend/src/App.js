@@ -59,7 +59,6 @@ const App = () => {
           exact
           path='/private/pastes/:pasteId'
           component={Paste}
-          // render={(props) => <Paste {...props} />}
         />
       </ThemeProvider>
     </>

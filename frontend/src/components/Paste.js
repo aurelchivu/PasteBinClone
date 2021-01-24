@@ -1,7 +1,32 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
+import { makeStyles } from '@material-ui/core/styles';
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
+
+const useStyles = makeStyles({
+  root: {
+    minWidth: 275,
+  },
+  bullet: {
+    display: 'inline-block',
+    margin: '0 2px',
+    transform: 'scale(0.8)',
+  },
+  title: {
+    fontSize: 14,
+  },
+  pos: {
+    marginBottom: 12,
+  },
+});
 
 const Paste = ({ match }) => {
+  const classes = useStyles();
   const [pastesList, setPastesList] = useState([]);
 
   const userInfoFromStorage = localStorage.getItem('userInfo')
@@ -22,8 +47,6 @@ const Paste = ({ match }) => {
         config
       );
 
-      console.log(data);
-
       setPastesList(data.data);
     } catch (error) {
       console.log(error);
@@ -35,16 +58,35 @@ const Paste = ({ match }) => {
   }, []);
 
   const paste = pastesList.find((p) => p._id === match.params.pasteId);
-  console.log(paste);
 
   return (
     <>
-      {paste && (
-        <div>
-          <h2>{paste.title}</h2>
-          <p>{paste.content}</p>
-        </div>
-      )}
+      {paste ? (
+        <Card className={classes.root}>
+          <CardContent>
+            <Typography
+              className={classes.title}
+              color='textSecondary'
+              gutterBottom
+            >
+              {paste.title}
+            </Typography>
+            <Typography variant='body2' component='p'>
+              {paste.content}
+            </Typography>
+          </CardContent>
+          <CardActions>
+            <Button
+              size='small'
+              variant='outlined'
+              component={Link}
+              to='/private'
+            >
+              Go back
+            </Button>
+          </CardActions>
+        </Card>
+      ) : <div>Loading...</div>}
     </>
   );
 };

@@ -57,13 +57,11 @@ const SignUpComponent = ({ location, history }) => {
       );
 
       if (data.success) {
-        console.log(data);
+        localStorage.setItem('userInfo', JSON.stringify(data));
         login(email, password);
         history.push('/private');
       }
-
-      localStorage.setItem('userInfo', JSON.stringify(data));
-
+      
     } catch (error) {
       console.log(error);
     }

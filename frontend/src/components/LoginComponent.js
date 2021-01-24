@@ -63,6 +63,7 @@ const LoginComponent = ({ history }) => {
         localStorage.setItem('userInfo', JSON.stringify(data));
         history.push('/private');
       }
+      
     } catch (error) {
       console.log(error);
     }
